@@ -1,0 +1,59 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Suicide Rates of Asian Countries in 2000",
+    "projection": {"type": "equirectangular"},
+    "width": "container",
+    "height": 400,
+    "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/echo0039/3179-testrepo/main/asia.geo.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "asia.geo"
+            }
+          },
+          "mark": {
+            "type": "geoshape",
+            "fill": "lightgray",
+            "stroke": "white"
+          }
+        },
+        {
+            "data": {
+                "url": "https://raw.githubusercontent.com/echo0039/3179-testrepo/main/asia.geo.topojson",
+                "format": {"type": "topojson", "feature": "asia.geo"}
+              },
+              "transform": [
+                {
+                  "lookup": "properties.name",
+                  "from":{
+                    "data": {
+                      "url": "https://raw.githubusercontent.com/echo0039/3179-testrepo/main/asian%20suicide%20rates%202000%20(cleaned).csv"
+                    },
+                    "key": "Country",
+                    "fields": ["Sex", "Crude_suicide_rates_(per_100000_population)"]
+                  }
+                }
+              ],
+              "layer": [
+                  {
+                    "mark": {"type": "geoshape"},
+                    "encoding": {
+                      "color": {
+                        "field": "Crude_suicide_rates_(per_100000_population)",
+                        "type": "quantitative",
+                        "scale": {
+                          "domain": [0, 60],
+                          "scheme": "blues"}
+                      },
+                      "tooltip": [
+                        {"field": "properties.name", "type": "nominal", "title": "Country"},
+                        {"field": "Crude_suicide_rates_(per_100000_population)", "type": "quantitative", "title": "Suicide rate (per 100k population) (%)"}
+                      ]
+                    }
+                    }
+                ]
+        }
+    ]
+  }
